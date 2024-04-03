@@ -160,8 +160,8 @@ unsafe fn write_any_value(
                         write!(f, "{quote}")?;
                         end_with_quote = true
                     }
-                    let trim_zeros = polars_core::fmt::get_trim_decimal_zeros();
-                    let buf = arrow::legacy::compute::decimal::format_decimal(v, scale, trim_zeros);
+                    let trim_zeros = arrow::compute::decimal::get_trim_decimal_zeros();
+                    let buf = arrow::compute::decimal::format_decimal(v, scale, trim_zeros);
                     write!(f, "{}", buf.as_str())
                 },
                 _ => {

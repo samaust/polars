@@ -2897,7 +2897,6 @@ dependencies = [
  "itoa",
  "num-traits",
  "polars-arrow",
- "polars-core",
  "polars-error",
  "polars-utils",
  "ryu",

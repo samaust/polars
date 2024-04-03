@@ -1,4 +1,15 @@
+use std::sync::atomic::{AtomicBool, Ordering};
+
 use atoi::FromRadix10SignedChecked;
+
+static TRIM_DECIMAL_ZEROS: AtomicBool = AtomicBool::new(false);
+
+pub fn get_trim_decimal_zeros() -> bool {
+    TRIM_DECIMAL_ZEROS.load(Ordering::Relaxed)
+}
+pub fn set_trim_decimal_zeros(trim: Option<bool>) {
+    TRIM_DECIMAL_ZEROS.store(trim.unwrap_or(false), Ordering::Relaxed)
+}
 
 /// Count the number of b'0's at the beginning of a slice.
 fn leading_zeros(bytes: &[u8]) -> u8 {

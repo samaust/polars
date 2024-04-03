@@ -2,10 +2,10 @@ use std::io::Write;
 
 use arrow::array::*;
 use arrow::bitmap::utils::ZipValidity;
+#[cfg(feature = "dtype-decimal")]
+use arrow::compute::decimal::{format_decimal, get_trim_decimal_zeros};
 use arrow::datatypes::{ArrowDataType, IntegerType, TimeUnit};
 use arrow::io::iterator::BufStreamingIterator;
-#[cfg(feature = "dtype-decimal")]
-use arrow::legacy::compute::decimal::format_decimal;
 use arrow::offset::Offset;
 #[cfg(feature = "chrono-tz")]
 use arrow::temporal_conversions::parse_offset_tz;
@@ -121,7 +121,7 @@ fn decimal_serializer<'a>(
     offset: usize,
     take: usize,
 ) -> Box<dyn StreamingIterator<Item = [u8]> + 'a + Send + Sync> {
-    let trim_zeros = polars_core::fmt::get_trim_decimal_zeros();
+    let trim_zeros = get_trim_decimal_zeros();
     let f = move |x: Option<&i128>, buf: &mut Vec<u8>| {
         if let Some(x) = x {
             utf8::write_str(buf, format_decimal(*x, scale, trim_zeros).as_str()).unwrap()
